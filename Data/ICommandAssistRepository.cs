@@ -8,7 +8,7 @@ namespace CommandAssistApi.Data
 {
     public interface ICommandAssistRepository
     {
-        IEnumerable<Command> GetAppCommands();
+        IEnumerable<Command> GetAllCommands();
         Command GetCommandById(int id);
     }
 }

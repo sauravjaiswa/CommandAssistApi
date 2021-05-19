@@ -14,13 +14,18 @@ namespace CommandAssistApi.Controllers
     [ApiController]
     public class CommandsController : ControllerBase
     {
-        private readonly MockCommandAssistRepository repository = new MockCommandAssistRepository();
+        private readonly ICommandAssistRepository repository;
+
+        public CommandsController(ICommandAssistRepository repository)
+        {
+            this.repository = repository;
+        }
 
         //GET api/commands
         [HttpGet]
         public ActionResult<IEnumerable<Command>> GetAllCommands()
         {
-            var commandItems = repository.GetAppCommands();
+            var commandItems = repository.GetAllCommands();
             return Ok(commandItems);
         }
 

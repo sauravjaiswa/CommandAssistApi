@@ -8,7 +8,7 @@ namespace CommandAssistApi.Data
 {
     public class MockCommandAssistRepository : ICommandAssistRepository
     {
-        public IEnumerable<Command> GetAppCommands()
+        public IEnumerable<Command> GetAllCommands()
         {
             var commands = new List<Command>
             {
