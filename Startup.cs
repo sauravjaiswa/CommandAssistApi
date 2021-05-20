@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Serialization;
 
 namespace CommandAssistApi
 {
@@ -28,6 +29,11 @@ namespace CommandAssistApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CommandContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CommandAssistConnection")));
+
+            services.AddControllers().AddNewtonsoftJson(s =>
+            {
+                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
             services.AddControllers();
 
