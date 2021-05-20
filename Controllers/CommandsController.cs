@@ -100,5 +100,21 @@ namespace CommandAssistApi.Controllers
 
             return NoContent();
         }
+
+        //DELETE api/commands/{id}
+        [HttpDelete("{id}")]
+        public ActionResult deleteCommand(int id)
+        {
+            var commandModelFromRepo = repository.GetCommandById(id);
+            if (commandModelFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            repository.DeleteCommand(commandModelFromRepo);
+            repository.SaveChanges();
+
+            return NoContent();
+        }
     }
 }

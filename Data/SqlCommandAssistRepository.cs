@@ -25,6 +25,16 @@ namespace CommandAssistApi.Data
             commandContext.Commands.Add(command);
         }
 
+        public void DeleteCommand(Command command)
+        {
+            if (command == null)
+            {
+                throw new ArgumentException(nameof(command));
+            }
+
+            commandContext.Commands.Remove(command);
+        }
+
         public IEnumerable<Command> GetAllCommands()
         {
             return commandContext.Commands.ToList();
