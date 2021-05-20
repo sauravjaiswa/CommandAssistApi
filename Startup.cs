@@ -31,6 +31,8 @@ namespace CommandAssistApi
 
             services.AddControllers();
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             //services.AddScoped<ICommandAssistRepository, MockCommandAssistRepository>();
             services.AddScoped<ICommandAssistRepository, SqlCommandAssistRepository>();
         }

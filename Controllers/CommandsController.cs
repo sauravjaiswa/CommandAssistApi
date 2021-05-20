@@ -1,4 +1,6 @@
-﻿using CommandAssistApi.Data;
+﻿using AutoMapper;
+using CommandAssistApi.Data;
+using CommandAssistApi.Dtos;
 using CommandAssistApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,26 +17,62 @@ namespace CommandAssistApi.Controllers
     public class CommandsController : ControllerBase
     {
         private readonly ICommandAssistRepository repository;
+        private readonly IMapper mapper;
 
-        public CommandsController(ICommandAssistRepository repository)
+        public CommandsController(ICommandAssistRepository repository, IMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         //GET api/commands
         [HttpGet]
-        public ActionResult<IEnumerable<Command>> GetAllCommands()
+        public ActionResult<IEnumerable<CommandReadDto>> GetAllCommands()
         {
             var commandItems = repository.GetAllCommands();
-            return Ok(commandItems);
+            return Ok(mapper.Map<IEnumerable<CommandReadDto>>(commandItems));
         }
 
-        //GET api/commands/5
-        [HttpGet("{id}")]
-        public ActionResult<Command> GetCommandById(int id)
+        //GET api/commands/{id}
+        [HttpGet("{id}", Name="GetCommandById")]
+        public ActionResult<CommandReadDto> GetCommandById(int id)
         {
             var commandItem = repository.GetCommandById(id);
-            return Ok(commandItem);
+            if (commandItem != null)
+            {
+                return Ok(mapper.Map<CommandReadDto>(commandItem));
+            }
+            return NotFound();
+        }
+
+        //POST api/commands
+        [HttpPost]
+        public ActionResult<CommandReadDto> CreateCommand(CommandCreateDto commandCreateDto)
+        {
+            var commandModel = mapper.Map<Command>(commandCreateDto);
+            repository.CreateCommand(commandModel);
+            repository.SaveChanges();
+
+            var commandReadDto = mapper.Map<CommandReadDto>(commandModel);
+
+            return CreatedAtRoute(nameof(GetCommandById), new { Id = commandReadDto.Id }, commandReadDto);
+        }
+
+        //PUT api/commands/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateCommand(int id,CommandUpdateDto commandUpdateDto)
+        {
+            var commandModelFromRepo = repository.GetCommandById(id);
+            if (commandModelFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            mapper.Map(commandUpdateDto, commandModelFromRepo);
+            repository.UpdateCommand(commandModelFromRepo);
+            repository.SaveChanges();
+
+            return NoContent();
         }
     }
 }

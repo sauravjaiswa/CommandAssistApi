@@ -15,6 +15,16 @@ namespace CommandAssistApi.Data
             this.commandContext = commandContext;
         }
 
+        public void CreateCommand(Command command)
+        {
+            if (command == null)
+            {
+                throw new ArgumentException(nameof(command));
+            }
+
+            commandContext.Commands.Add(command);
+        }
+
         public IEnumerable<Command> GetAllCommands()
         {
             return commandContext.Commands.ToList();
@@ -23,6 +33,16 @@ namespace CommandAssistApi.Data
         public Command GetCommandById(int id)
         {
             return commandContext.Commands.FirstOrDefault(p => p.Id == id);
+        }
+
+        public bool SaveChanges()
+        {
+            return (commandContext.SaveChanges() >= 0);
+        }
+
+        public void UpdateCommand(Command command)
+        {
+            //Nothing
         }
     }
 }

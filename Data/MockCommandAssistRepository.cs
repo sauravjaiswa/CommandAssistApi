@@ -8,6 +8,11 @@ namespace CommandAssistApi.Data
 {
     public class MockCommandAssistRepository : ICommandAssistRepository
     {
+        public void CreateCommand(Command command)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Command> GetAllCommands()
         {
             var commands = new List<Command>
@@ -23,6 +28,16 @@ namespace CommandAssistApi.Data
         public Command GetCommandById(int id)
         {
             return new Command { Id = 0, HowTo = "Boil an egg", Line = "Boil water", Platform = "Kettle & Pan" };
+        }
+
+        public bool SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateCommand(Command command)
+        {
+            throw new NotImplementedException();
         }
     }
 }
